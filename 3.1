@@ -1,0 +1,130 @@
+close all;
+%--------------------------wczytanie obrazu i przygotowanie do filtracji
+a = imread('lena.png');
+acb = rgb2gray(a);
+A = imnoise(acb,'gaussian');
+B = imnoise(acb,'salt & pepper');
+C = imnoise(acb,'poisson');
+D = imnoise(acb,'speckle');
+%--------------------------wyświetlenie obrazów początkowych (z szumami)
+figure(1);
+subplot(2,2,1); imshow(A); title('szum Gaussa');
+subplot(2,2,2); imshow(B); title('szum sól i pieprz');
+subplot(2,2,3); imshow(C); title('szum Poissona');
+subplot(2,2,4); imshow(D); title('szum Speckle');
+%--------------------------filtracja filtrem mean removal
+mr = [-1 -1 -1; -1 9 -1; -1 -1 -1];
+
+Amr = imfilter(A,mr);
+Bmr = imfilter(B,mr);
+Cmr = imfilter(C,mr);
+Dmr = imfilter(D,mr);
+
+figure(2);
+subplot(2,2,1); imshow(Amr); title('filtr mean removal - szum Gaussa');
+subplot(2,2,2); imshow(Bmr); title('filtr mean removal - szum sól i pieprz');
+subplot(2,2,3); imshow(Cmr); title('filtr mean removal - szum Poissona');
+subplot(2,2,4); imshow(Dmr); title('filtr mean removal - szum Speckle');
+%--------------------------ocena jakosci filtracji filtra mean removal
+disp('PSNR dla mean removal');
+
+PSNR_mr_gauss = psnr(Amr,acb);
+PSNR_mr_salt_pepper = psnr(Bmr,acb);
+PSNR_mr_poiss = psnr(Cmr,acb);
+PSNR_mr_speckle = psnr(Dmr,acb);
+
+disp('PSNR_mr_g');
+disp(PSNR_mr_gauss);
+disp('PSNR_mr_sp');
+disp(PSNR_mr_salt_pepper);
+disp('PSNR_mr_p');
+disp(PSNR_mr_poiss);
+disp('PSNR_mr_s');
+disp(PSNR_mr_speckle);
+%--------------------------filtracja filtrem H1
+h1 = (1/2)*[0 -1 0; -1 6 -1; 0 -1 0];
+
+Ah1 = imfilter(A,h1);
+Bh1 = imfilter(B,h1);
+Ch1 = imfilter(C,h1);
+Dh1 = imfilter(D,h1);
+
+figure(3);
+subplot(2,2,1); imshow(Ah1); title('filtr H1 - szum Gaussa');
+subplot(2,2,2); imshow(Bh1); title('filtr H1 - szum sól i pieprz');
+subplot(2,2,3); imshow(Ch1); title('filtr H1 - szum Poissona');
+subplot(2,2,4); imshow(Dh1); title('filtr H1 - szum Speckle');
+%--------------------------ocena jakosci filtracji filtra H1
+disp('PSNR dla filtra H1');
+
+PSNR_h1_gauss = psnr(Ah1,acb);
+PSNR_h1_salt_pepper = psnr(Bh1,acb);
+PSNR_h1_poiss = psnr(Ch1,acb);
+PSNR_h1_speckle = psnr(Dh1,acb);
+
+disp('PSNR_h1_g');
+disp(PSNR_h1_gauss);
+disp('PSNR_h1_sp');
+disp(PSNR_h1_salt_pepper);
+disp('PSNR_h1_p');
+disp(PSNR_h1_poiss);
+disp('PSNR_h1_s');
+disp(PSNR_h1_speckle);
+%--------------------------filtracja filtrem H2
+h2 = (1/14)*[0 -1 0; -1 18 -1; 0 -1 0];
+
+Ah2 = imfilter(A,h2);
+Bh2 = imfilter(B,h2);
+Ch2 = imfilter(C,h2);
+Dh2 = imfilter(D,h2);
+
+figure(4);
+subplot(2,2,1); imshow(Ah2); title('filtr H2 - szum Gaussa');
+subplot(2,2,2); imshow(Bh2); title('filtr H2 - szum sól i pieprz');
+subplot(2,2,3); imshow(Ch2); title('filtr H2 - szum Poissona');
+subplot(2,2,4); imshow(Dh2); title('filtr H2 - szum Speckle');
+%--------------------------ocena jakosci filtracji filtra H2
+disp('PSNR dla filtra H2');
+
+PSNR_h2_g = psnr(Ah2,acb);
+PSNR_h2_sp = psnr(Bh2,acb);
+PSNR_h2_p = psnr(Ch2,acb);
+PSNR_h2_s = psnr(Dh2,acb);
+
+disp('PSNR_h2_g');
+disp(PSNR_h2_g);
+disp('PSNR_h2_sp');
+disp(PSNR_h2_sp);
+disp('PSNR_h2_p');
+disp(PSNR_h2_p);
+disp('PSNR_h2_s');
+disp(PSNR_h2_s);
+%--------------------------filtracja filtrem własnym
+w = [1 -2 1; -2 5 -2; 1 -2 1];
+
+Aw = imfilter(A,w);
+Bw = imfilter(B,w);
+Cw = imfilter(C,w);
+Dw = imfilter(D,w);
+
+figure(5);
+subplot(2,2,1); imshow(Aw); title('filtr wlasny - szum Gaussa');
+subplot(2,2,2); imshow(Bw); title('filtr wlasny - szum sól i pieprz');
+subplot(2,2,3); imshow(Cw); title('filtr wlasny - szum Poissona');
+subplot(2,2,4); imshow(Dw); title('filtr wlasny - szum Speckle');
+%--------------------------ocena jakosci filtracji filtra wlasnego
+disp('PSNR dla filtra wlasnego');
+
+PSNR_w_g = psnr(Aw,acb);
+PSNR_w_sp = psnr(Bw,acb);
+PSNR_w_p = psnr(Cw,acb);
+PSNR_w_s = psnr(Dw,acb);
+
+disp('PSNR_w_g');
+disp(PSNR_w_g);
+disp('PSNR_w_sp');
+disp(PSNR_w_sp);
+disp('PSNR_w_p');
+disp(PSNR_w_p);
+disp('PSNR_w_s');
+disp(PSNR_w_s);
