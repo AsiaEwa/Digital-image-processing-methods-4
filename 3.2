@@ -1,0 +1,135 @@
+close all;
+%--------------------------wczytanie obrazu i przygotowanie do filtracji
+a = imread('lena.png');
+acb = rgb2gray(a);
+as = imnoise(acb,'poisson');
+us = (1/9) * [1 1 1; 1 1 1; 1 1 1];
+g = (1/16) * [1 2 1; 2 4 2; 1 2 1];
+ko = (1/21)*[0 1 1 1 0; 1 1 1 1 1; 1 1 1 1 1; 1 1 1 1 1; 0 1 1 1 0];
+kw = (1/25) * [1 1 1 1 1; 1 1 1 1 1; 1 1 1 1 1; 1 1 1 1 1; 1 1 1 1 1];
+A = imfilter(as,us);
+B = imfilter(as,g);
+C = imfilter(as,ko);
+D = imfilter(as,kw);
+%--------------------------wyświetlenie obrazów początkowych (najlepsze odfiltrowane dolnoprzepustow)
+figure(1);
+subplot(2,2,1); imshow(A); title('filtr usredniajacy - szum Poissona');
+subplot(2,2,2); imshow(B); title('filtr Gaussa - szum Poissona');
+subplot(2,2,3); imshow(C); title('filtr kolowy - szum Poissona');
+subplot(2,2,4); imshow(D); title('filtr kwadratowy - szum Poissona');
+%--------------------------filtracja filtrem mean removal
+mr = [-1 -1 -1; -1 9 -1; -1 -1 -1];
+
+Amr = imfilter(A,mr);
+Bmr = imfilter(B,mr);
+Cmr = imfilter(C,mr);
+Dmr = imfilter(D,mr);
+
+figure(2);
+subplot(2,2,1); imshow(Amr); title('filtr us-mr - szum Poissona');
+subplot(2,2,2); imshow(Bmr); title('filtr ga-mr - szum Poissona');
+subplot(2,2,3); imshow(Cmr); title('filtr ko-mr - szum Poissona');
+subplot(2,2,4); imshow(Dmr); title('filtr kw-mr - szum Poissona');
+%--------------------------ocena jakosci filtracji filtra mean removal
+disp('PSNR dla mean removal');
+
+PSNR_us_mr_p = psnr(Amr,acb);
+PSNR_g_mr_p = psnr(Bmr,acb);
+PSNR_ko_mr_p = psnr(Cmr,acb);
+PSNR_kw_mr_p = psnr(Dmr,acb);
+
+disp('PSNR_us_mr_p');
+disp(PSNR_us_mr_p);
+disp('PSNR_g_mr_p');
+disp(PSNR_g_mr_p);
+disp('PSNR_ko_mr_p');
+disp(PSNR_ko_mr_p);
+disp('PSNR_kw_mr_p');
+disp(PSNR_kw_mr_p);
+%--------------------------filtracja filtrem H1
+h1 = (1/2)*[0 -1 0; -1 6 -1; 0 -1 0];
+
+Ah1 = imfilter(A,h1);
+Bh1 = imfilter(B,h1);
+Ch1 = imfilter(C,h1);
+Dh1 = imfilter(D,h1);
+
+figure(3);
+subplot(2,2,1); imshow(Ah1); title('filtr us-h1 - szum Poissona');
+subplot(2,2,2); imshow(Bh1); title('filtr ga-h1 - szum Poissona');
+subplot(2,2,3); imshow(Ch1); title('filtr ko-h1 - szum Poissona');
+subplot(2,2,4); imshow(Dh1); title('filtr kw-h1 - szum Poissona');
+%--------------------------ocena jakosci filtracji filtra H1
+disp('PSNR dla filtra H1');
+
+PSNR_us_h1_p = psnr(Ah1,acb);
+PSNR_g_h1_p = psnr(Bh1,acb);
+PSNR_ko_h1_p = psnr(Ch1,acb);
+PSNR_kw_h1_p = psnr(Dh1,acb);
+
+disp('PSNR_us_h1_p');
+disp(PSNR_us_h1_p);
+disp('PSNR_g_h1_p');
+disp(PSNR_g_h1_p);
+disp('PSNR_ko_h1_p');
+disp(PSNR_ko_h1_p);
+disp('PSNR_kw_h1_p');
+disp(PSNR_kw_h1_p);
+%--------------------------filtracja filtrem H2
+h2 = (1/14)*[0 -1 0; -1 18 -1; 0 -1 0];
+
+Ah2 = imfilter(A,h2);
+Bh2 = imfilter(B,h2);
+Ch2 = imfilter(C,h2);
+Dh2 = imfilter(D,h2);
+
+figure(4);
+subplot(2,2,1); imshow(Ah2); title('filtr us-h2 - szum Poissona');
+subplot(2,2,2); imshow(Bh2); title('filtr ga-h2 - szum Poissona');
+subplot(2,2,3); imshow(Ch2); title('filtr ko-h2 - szum Poissona');
+subplot(2,2,4); imshow(Dh2); title('filtr kw-h2 - szum Poissona');
+%--------------------------ocena jakosci filtracji filtra H2
+disp('PSNR dla filtra H2');
+
+PSNR_us_h2_p = psnr(Ah2,acb);
+PSNR_g_h2_p = psnr(Bh2,acb);
+PSNR_ko_h2_p = psnr(Ch2,acb);
+PSNR_kw_h2_p = psnr(Dh2,acb);
+
+disp('PSNR_us_h2_p');
+disp(PSNR_us_h2_p);
+disp('PSNR_g_h2_p');
+disp(PSNR_g_h2_p);
+disp('PSNR_ko_h2_p');
+disp(PSNR_ko_h2_p);
+disp('PSNR_kw_h2_p');
+disp(PSNR_kw_h2_p);
+%--------------------------filtracja filtrem własnym
+w = [1 -2 1; -2 5 -2; 1 -2 1];
+
+Aw = imfilter(A,w);
+Bw = imfilter(B,w);
+Cw = imfilter(C,w);
+Dw = imfilter(D,w);
+
+figure(5);
+subplot(2,2,1); imshow(Aw); title('filtr us-w - szum Poissona');
+subplot(2,2,2); imshow(Bw); title('filtr ga-w - szum Poissona');
+subplot(2,2,3); imshow(Cw); title('filtr ko-w - szum Poissona');
+subplot(2,2,4); imshow(Dw); title('filtr kw-w - szum Poissona');
+%--------------------------ocena jakosci filtracji filtra wlasnego
+disp('PSNR dla filtra wlasnego');
+
+PSNR_us_w_p = psnr(Aw,acb);
+PSNR_g_w_p = psnr(Bw,acb);
+PSNR_ko_w_p = psnr(Cw,acb);
+PSNR_kw_w_p = psnr(Dw,acb);
+
+disp('PSNR_us_w_p');
+disp(PSNR_us_w_p);
+disp('PSNR_g_w_p');
+disp(PSNR_g_w_p);
+disp('PSNR_ko_w_p');
+disp(PSNR_ko_w_p);
+disp('PSNR_kw_w_p');
+disp(PSNR_kw_w_p);
