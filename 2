@@ -1,0 +1,130 @@
+close all;
+% wczytanie obrazu i przygotowanie do filtracji
+a = imread('lena.png');
+acb = rgb2gray(a);
+A = imnoise(acb,'gaussian');
+B = imnoise(acb,'salt & pepper');
+C = imnoise(acb,'poisson');
+D = imnoise(acb,'speckle');
+% wyświetlenie obrazów początkowych (z szumami)
+figure(1);
+subplot(2,2,1); imshow(A); title('szum Gaussa');
+subplot(2,2,2); imshow(B); title('szum sól i pieprz');
+subplot(2,2,3); imshow(C); title('szum Poissona');
+subplot(2,2,4); imshow(D); title('szum Speckle');
+% filtracja filtrem usredniajacym
+us = (1/9) * [1 1 1; 1 1 1; 1 1 1];
+
+Aus = imfilter(A,us);
+Bus = imfilter(B,us);
+Cus = imfilter(C,us);
+Dus = imfilter(D,us);
+
+figure(2);
+subplot(2,2,1); imshow(Aus); title('filtr usredniajacy - szum Gaussa');
+subplot(2,2,2); imshow(Bus); title('filtr usredniajacy - szum sól i pieprz');
+subplot(2,2,3); imshow(Cus); title('filtr usredniajacy - szum Poissona');
+subplot(2,2,4); imshow(Dus); title('filtr usredniajacy - szum Speckle');
+% ocena jakosci filtracji filtra usredniajacego
+disp('PSNR dla filtra usr');
+
+PSNR_us_gauss = psnr(Aus,acb);
+PSNR_us_salt_pepper = psnr(Bus,acb);
+PSNR_us_poiss = psnr(Cus,acb);
+PSNR_us_speckle = psnr(Dus,acb);
+
+disp('PSNR_us_g');
+disp(PSNR_us_gauss);
+disp('PSNR_us_sp');
+disp(PSNR_us_salt_pepper);
+disp('PSNR_us_p');
+disp(PSNR_us_poiss);
+disp('PSNR_us_s');
+disp(PSNR_us_speckle);
+% filtracja filtrem Gaussa
+g = (1/16) * [1 2 1; 2 4 2; 1 2 1];
+
+Ag = imfilter(A,g);
+Bg = imfilter(B,g);
+Cg = imfilter(C,g);
+Dg = imfilter(D,g);
+
+figure(3);
+subplot(2,2,1); imshow(Ag); title('filtr Gaussa - szum Gaussa');
+subplot(2,2,2); imshow(Bg); title('filtr Gaussa - szum sól i pieprz');
+subplot(2,2,3); imshow(Cg); title('filtr Gaussa - szum Poissona');
+subplot(2,2,4); imshow(Dg); title('filtr Gaussa - szum Speckle');
+% ocena jakosci filtracji filtra Gaussa
+disp('PSNR dla filtra Gaussa');
+
+PSNR_g_gauss = psnr(Ag,acb);
+PSNR_g_salt_pepper = psnr(Bg,acb);
+PSNR_g_poiss = psnr(Cg,acb);
+PSNR_g_speckle = psnr(Dg,acb);
+
+disp('PSNR_g_g');
+disp(PSNR_g_gauss);
+disp('PSNR_g_sp');
+disp(PSNR_g_salt_pepper);
+disp('PSNR_g_p');
+disp(PSNR_g_poiss);
+disp('PSNR_g_s');
+disp(PSNR_g_speckle);
+% filtracja filtrem kolowym
+ko = (1/21)*[0 1 1 1 0; 1 1 1 1 1; 1 1 1 1 1; 1 1 1 1 1; 0 1 1 1 0];
+
+Ako = imfilter(A,ko);
+Bko = imfilter(B,ko);
+Cko = imfilter(C,ko);
+Dko = imfilter(D,ko);
+
+figure(4);
+subplot(2,2,1); imshow(Ako); title('filtr kolowy - szum Gaussa');
+subplot(2,2,2); imshow(Bko); title('filtr kolowy - szum sól i pieprz');
+subplot(2,2,3); imshow(Cko); title('filtr kolowy - szum Poissona');
+subplot(2,2,4); imshow(Dko); title('filtr kolowy - szum Speckle');
+% ocena jakosci filtracji filtra kolowego
+disp('PSNR dla filtra kolowego');
+
+PSNR_ko_g = psnr(Ako,acb);
+PSNR_ko_sp = psnr(Bko,acb);
+PSNR_ko_p = psnr(Cko,acb);
+PSNR_ko_s = psnr(Dko,acb);
+
+disp('PSNR_ko_g');
+disp(PSNR_ko_g);
+disp('PSNR_ko_sp');
+disp(PSNR_ko_sp);
+disp('PSNR_ko_p');
+disp(PSNR_ko_p);
+disp('PSNR_ko_s');
+disp(PSNR_ko_s);
+% filtracja filtrem kwadratowym
+kw = (1/25) * [1 1 1 1 1; 1 1 1 1 1; 1 1 1 1 1; 1 1 1 1 1; 1 1 1 1 1];
+
+Akw = imfilter(A,kw);
+Bkw = imfilter(B,kw);
+Ckw = imfilter(C,kw);
+Dkw = imfilter(D,kw);
+
+figure(5);
+subplot(2,2,1); imshow(Akw); title('filtr kwadratowy - szum Gaussa');
+subplot(2,2,2); imshow(Bkw); title('filtr kwadratowy - szum sól i pieprz');
+subplot(2,2,3); imshow(Ckw); title('filtr kwadratowy - szum Poissona');
+subplot(2,2,4); imshow(Dkw); title('filtr kwadratowy - szum Speckle');
+% ocena jakosci filtracji filtra kwadratowego
+disp('PSNR dla filtra kwadratowego');
+
+PSNR_kw_g = psnr(Akw,acb);
+PSNR_kw_sp = psnr(Bkw,acb);
+PSNR_kw_p = psnr(Ckw,acb);
+PSNR_kw_s = psnr(Dkw,acb);
+
+disp('PSNR_kw_g');
+disp(PSNR_kw_g);
+disp('PSNR_kw_sp');
+disp(PSNR_kw_sp);
+disp('PSNR_kw_p');
+disp(PSNR_kw_p);
+disp('PSNR_kw_s');
+disp(PSNR_kw_s);
